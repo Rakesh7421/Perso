@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}LinkedIn Post Scheduler - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="hero-section text-center mb-5">
+            <h1 class="display-4 fw-bold text-linkedin mb-3">
+                <i class="bi bi-linkedin me-3"></i>
+                LinkedIn Post Scheduler
+            </h1>
+            <p class="lead mb-4">
+                Streamline your LinkedIn content strategy with our powerful scheduling platform. 
+                Upload bulk data, create engaging posts, and manage your social media presence with ease.
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-linkedin btn-lg me-md-2">
+                    <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                </a>
+                <a href="{{ url_for('create_post') }}" class="btn btn-outline-linkedin btn-lg">
+                    <i class="bi bi-plus-circle me-2"></i>Create Post
+                </a>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-upload"></i>
+                        </div>
+                        <h5 class="card-title">Bulk Upload</h5>
+                        <p class="card-text">
+                            Import multiple posts from CSV or JSON files. 
+                            Perfect for content calendars and batch scheduling.
+                        </p>
+                        <a href="{{ url_for('upload_data') }}" class="btn btn-outline-linkedin">
+                            Upload Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-calendar-event"></i>
+                        </div>
+                        <h5 class="card-title">Smart Scheduling</h5>
+                        <p class="card-text">
+                            Schedule posts for optimal engagement times. 
+                            Visual timeline helps you manage your content flow.
+                        </p>
+                        <a href="{{ url_for('create_post') }}" class="btn btn-outline-linkedin">
+                            Schedule Post
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-pencil-square"></i>
+                        </div>
+                        <h5 class="card-title">Rich Text Editor</h5>
+                        <p class="card-text">
+                            Create engaging posts with formatting, hashtags, and mentions. 
+                            Real-time character count keeps you within LinkedIn limits.
+                        </p>
+                        <a href="{{ url_for('create_post') }}" class="btn btn-outline-linkedin">
+                            Create Post
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="feature-card h-100">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h5 class="card-title">Analytics Dashboard</h5>
+                        <p class="card-text">
+                            Track your scheduled and published posts. 
+                            Monitor your content pipeline with detailed analytics.
+                        </p>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-linkedin">
+                            View Analytics
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started -->
+        <div class="getting-started-section">
+            <h2 class="text-center mb-4">Getting Started</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="step-card text-center">
+                        <div class="step-number">1</div>
+                        <h5>Upload Your Data</h5>
+                        <p>Import posts from CSV/JSON or create them manually using our intuitive interface.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card text-center">
+                        <div class="step-number">2</div>
+                        <h5>Schedule & Manage</h5>
+                        <p>Set optimal posting times and manage your content calendar from the dashboard.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="step-card text-center">
+                        <div class="step-number">3</div>
+                        <h5>Track Performance</h5>
+                        <p>Monitor your scheduled posts and track your content publishing success.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

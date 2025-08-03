@@ -1,0 +1,638 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Post Scheduler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'linkedin': '#0A66C2',
+                        'linkedin-dark': '#004182',
+                        'linkedin-light': '#00A0DC',
+                        'gray-linkedin': '#F3F2EF',
+                        'success': '#057642',
+                        'warning': '#F59E0B',
+                        'error': '#D93025'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- @COMPONENT: AppLayout -->
+    <div class="min-h-screen flex">
+        <!-- @COMPONENT: Sidebar -->
+        <aside class="w-64 bg-white shadow-sm border-r border-gray-200 flex flex-col">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-linkedin rounded-lg flex items-center justify-center">
+                        <i class="fab fa-linkedin-in text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold text-gray-900">LinkedIn Scheduler</h1>
+                        <p class="text-sm text-gray-500">Manage your posts</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="flex-1 p-4">
+                <ul class="space-y-2">
+                    <li>
+                        <a href="#" class="bg-linkedin text-white flex items-center px-4 py-3 rounded-lg">
+                            <i class="fas fa-tachometer-alt mr-3"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-700 hover:bg-gray-100 flex items-center px-4 py-3 rounded-lg transition">
+                            <i class="fas fa-edit mr-3"></i>
+                            Create Post
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-700 hover:bg-gray-100 flex items-center px-4 py-3 rounded-lg transition">
+                            <i class="fas fa-calendar-alt mr-3"></i>
+                            Scheduled Posts
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-700 hover:bg-gray-100 flex items-center px-4 py-3 rounded-lg transition">
+                            <i class="fas fa-upload mr-3"></i>
+                            Import Data
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-700 hover:bg-gray-100 flex items-center px-4 py-3 rounded-lg transition">
+                            <i class="fas fa-chart-bar mr-3"></i>
+                            Analytics
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center space-x-3">
+                    <!-- Professional headshot of a business person -->
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=64&h=64" alt="User avatar" class="w-10 h-10 rounded-full" data-mock="true">
+                    <div>
+                        <p class="text-sm font-medium text-gray-900" data-bind="user.name" data-mock="true">John Smith</p>
+                        <p class="text-xs text-gray-500" data-bind="user.email" data-mock="true">john@company.com</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainContent -->
+        <main class="flex-1 overflow-hidden">
+            <!-- @COMPONENT: Header -->
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-900">Dashboard</h2>
+                        <p class="text-sm text-gray-600">Manage your LinkedIn post schedule</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="bg-linkedin hover:bg-linkedin-dark text-white px-4 py-2 rounded-lg flex items-center space-x-2 transition" data-event="click:openCreatePost">
+                            <i class="fas fa-plus"></i>
+                            <span>Create Post</span>
+                        </button>
+                        <button class="text-gray-400 hover:text-gray-600 p-2">
+                            <i class="fas fa-bell text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+            <!-- @END_COMPONENT: Header -->
+
+            <!-- @COMPONENT: DashboardContent -->
+            <div class="p-6 overflow-y-auto h-full">
+                <!-- @COMPONENT: StatsCards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Total Posts</p>
+                                <p class="text-3xl font-bold text-gray-900" data-bind="stats.totalPosts" data-mock="true">247</p>
+                            </div>
+                            <div class="w-12 h-12 bg-linkedin-light bg-opacity-10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-file-alt text-linkedin-light text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4 text-sm">
+                            <span class="text-success">↗ 12%</span>
+                            <span class="text-gray-500 ml-2">vs last month</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Scheduled</p>
+                                <p class="text-3xl font-bold text-gray-900" data-bind="stats.scheduled" data-mock="true">18</p>
+                            </div>
+                            <div class="w-12 h-12 bg-warning bg-opacity-10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-clock text-warning text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4 text-sm">
+                            <span class="text-success">↗ 8%</span>
+                            <span class="text-gray-500 ml-2">this week</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Published</p>
+                                <p class="text-3xl font-bold text-gray-900" data-bind="stats.published" data-mock="true">229</p>
+                            </div>
+                            <div class="w-12 h-12 bg-success bg-opacity-10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-check-circle text-success text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4 text-sm">
+                            <span class="text-success">↗ 15%</span>
+                            <span class="text-gray-500 ml-2">success rate</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">Engagement</p>
+                                <p class="text-3xl font-bold text-gray-900" data-bind="stats.engagement" data-mock="true">1.2k</p>
+                            </div>
+                            <div class="w-12 h-12 bg-linkedin bg-opacity-10 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-heart text-linkedin text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center mt-4 text-sm">
+                            <span class="text-success">↗ 23%</span>
+                            <span class="text-gray-500 ml-2">avg per post</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: StatsCards -->
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- @COMPONENT: QuickActions -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                            
+                            <!-- @COMPONENT: FileUpload -->
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-6 hover:border-linkedin transition-colors" data-functionality="Drag-and-drop file upload with validation">
+                                <div class="w-12 h-12 mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                                    <i class="fas fa-cloud-upload-alt text-gray-400 text-xl"></i>
+                                </div>
+                                <p class="text-sm font-medium text-gray-900 mb-1">Import Post Data</p>
+                                <p class="text-xs text-gray-500 mb-3">Drop CSV or JSON files here</p>
+                                <button class="text-linkedin text-sm font-medium hover:text-linkedin-dark transition" data-event="click:openFileDialog">
+                                    Choose files
+                                </button>
+                            </div>
+                            <!-- @END_COMPONENT: FileUpload -->
+
+                            <div class="space-y-3">
+                                <button class="w-full bg-linkedin hover:bg-linkedin-dark text-white py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition" data-event="click:createNewPost">
+                                    <i class="fas fa-edit"></i>
+                                    <span>Create New Post</span>
+                                </button>
+                                
+                                <button class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-lg flex items-center justify-center space-x-2 transition" data-event="click:viewCalendar">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>View Calendar</span>
+                                </button>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-900 mb-3">Supported Formats</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">CSV</span>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">JSON</span>
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded">Excel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: QuickActions -->
+
+                    <!-- @COMPONENT: RecentPosts -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="text-lg font-semibold text-gray-900">Recent Posts</h3>
+                                <div class="flex items-center space-x-2">
+                                    <button class="text-gray-400 hover:text-gray-600 p-2 rounded-lg transition">
+                                        <i class="fas fa-filter"></i>
+                                    </button>
+                                    <button class="text-gray-400 hover:text-gray-600 p-2 rounded-lg transition">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="space-y-4">
+                                <!-- @MAP: recentPosts.map(post => ( -->
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <span class="px-2 py-1 bg-warning bg-opacity-10 text-warning text-xs font-medium rounded-full">Scheduled</span>
+                                                <span class="text-sm text-gray-500" data-bind="post.scheduledDate" data-mock="true">Dec 15, 2024 at 2:00 PM</span>
+                                            </div>
+                                            <p class="text-gray-900 font-medium mb-2" data-bind="post.title" data-mock="true">Exciting news about our Q4 product launch!</p>
+                                            <p class="text-gray-600 text-sm line-clamp-2" data-bind="post.preview" data-mock="true">We're thrilled to announce the upcoming launch of our revolutionary new platform that will transform how businesses connect with their customers...</p>
+                                            <div class="flex items-center mt-3 space-x-4 text-xs text-gray-500">
+                                                <span data-bind="post.characterCount" data-mock="true">247 characters</span>
+                                                <span data-bind="post.hashtags" data-mock="true">3 hashtags</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2 ml-4">
+                                            <button class="text-gray-400 hover:text-linkedin p-2 rounded-lg transition" data-event="click:editPost">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-success p-2 rounded-lg transition" data-event="click:previewPost">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-error p-2 rounded-lg transition" data-event="click:deletePost">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <span class="px-2 py-1 bg-success bg-opacity-10 text-success text-xs font-medium rounded-full">Published</span>
+                                                <span class="text-sm text-gray-500" data-bind="post.publishedDate" data-mock="true">Dec 12, 2024 at 9:00 AM</span>
+                                            </div>
+                                            <p class="text-gray-900 font-medium mb-2" data-bind="post.title" data-mock="true">Key insights from our latest industry research</p>
+                                            <p class="text-gray-600 text-sm line-clamp-2" data-bind="post.preview" data-mock="true">Our research team has uncovered fascinating trends in customer behavior that every business leader should know about...</p>
+                                            <div class="flex items-center mt-3 space-x-4 text-xs text-gray-500">
+                                                <span data-bind="post.engagement" data-mock="true">42 likes • 8 comments</span>
+                                                <span data-bind="post.characterCount" data-mock="true">189 characters</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2 ml-4">
+                                            <button class="text-gray-400 hover:text-linkedin p-2 rounded-lg transition" data-event="click:viewAnalytics">
+                                                <i class="fas fa-chart-line"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-success p-2 rounded-lg transition" data-event="click:duplicatePost">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <span class="px-2 py-1 bg-linkedin bg-opacity-10 text-linkedin text-xs font-medium rounded-full">Draft</span>
+                                                <span class="text-sm text-gray-500" data-bind="post.lastEdited" data-mock="true">Last edited 2 hours ago</span>
+                                            </div>
+                                            <p class="text-gray-900 font-medium mb-2" data-bind="post.title" data-mock="true">Tips for building stronger professional relationships</p>
+                                            <p class="text-gray-600 text-sm line-clamp-2" data-bind="post.preview" data-mock="true">Building meaningful professional relationships is crucial for career success. Here are five proven strategies...</p>
+                                            <div class="flex items-center mt-3 space-x-4 text-xs text-gray-500">
+                                                <span data-bind="post.characterCount" data-mock="true">156 characters</span>
+                                                <span data-bind="post.completion" data-mock="true">80% complete</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2 ml-4">
+                                            <button class="text-gray-400 hover:text-linkedin p-2 rounded-lg transition" data-event="click:continueDraft">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="text-gray-400 hover:text-warning p-2 rounded-lg transition" data-event="click:schedulePost">
+                                                <i class="fas fa-clock"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+
+                            <div class="mt-6 text-center">
+                                <button class="text-linkedin hover:text-linkedin-dark font-medium text-sm transition" data-event="click:viewAllPosts">
+                                    View all posts →
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: RecentPosts -->
+                </div>
+
+                <!-- @COMPONENT: UpcomingSchedule -->
+                <div class="mt-8">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900">Upcoming Schedule</h3>
+                            <div class="flex items-center space-x-2">
+                                <select class="text-sm border border-gray-300 rounded-lg px-3 py-2 bg-white" data-event="change:filterSchedule">
+                                    <option>Next 7 days</option>
+                                    <option>Next 30 days</option>
+                                    <option>This month</option>
+                                </select>
+                                <button class="bg-linkedin text-white px-4 py-2 rounded-lg text-sm hover:bg-linkedin-dark transition" data-event="click:openCalendarView">
+                                    Calendar View
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            <!-- @MAP: upcomingPosts.map(post => ( -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-medium text-gray-900" data-bind="post.date" data-mock="true">Dec 16</span>
+                                    <span class="text-xs text-gray-500" data-bind="post.time" data-mock="true">10:00 AM</span>
+                                </div>
+                                <p class="text-sm text-gray-700 line-clamp-3 mb-3" data-bind="post.content" data-mock="true">Sharing insights from our recent team building workshop and how it improved our collaboration...</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500" data-bind="post.characterCount" data-mock="true">198 chars</span>
+                                    <div class="flex items-center space-x-1">
+                                        <button class="text-gray-400 hover:text-linkedin p-1 rounded transition" data-event="click:quickEdit">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-error p-1 rounded transition" data-event="click:cancelSchedule">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-medium text-gray-900" data-bind="post.date" data-mock="true">Dec 18</span>
+                                    <span class="text-xs text-gray-500" data-bind="post.time" data-mock="true">2:30 PM</span>
+                                </div>
+                                <p class="text-sm text-gray-700 line-clamp-3 mb-3" data-bind="post.content" data-mock="true">Celebrating our team's achievement in delivering the project ahead of schedule. Proud of everyone's dedication!</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500" data-bind="post.characterCount" data-mock="true">134 chars</span>
+                                    <div class="flex items-center space-x-1">
+                                        <button class="text-gray-400 hover:text-linkedin p-1 rounded transition" data-event="click:quickEdit">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-error p-1 rounded transition" data-event="click:cancelSchedule">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-medium text-gray-900" data-bind="post.date" data-mock="true">Dec 20</span>
+                                    <span class="text-xs text-gray-500" data-bind="post.time" data-mock="true">11:15 AM</span>
+                                </div>
+                                <p class="text-sm text-gray-700 line-clamp-3 mb-3" data-bind="post.content" data-mock="true">Looking back at 2024's biggest lessons in leadership and what they mean for 2025 strategic planning...</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500" data-bind="post.characterCount" data-mock="true">212 chars</span>
+                                    <div class="flex items-center space-x-1">
+                                        <button class="text-gray-400 hover:text-linkedin p-1 rounded transition" data-event="click:quickEdit">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-error p-1 rounded transition" data-event="click:cancelSchedule">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow" data-mock="true">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="text-sm font-medium text-gray-900" data-bind="post.date" data-mock="true">Dec 22</span>
+                                    <span class="text-xs text-gray-500" data-bind="post.time" data-mock="true">4:00 PM</span>
+                                </div>
+                                <p class="text-sm text-gray-700 line-clamp-3 mb-3" data-bind="post.content" data-mock="true">Weekend reflection: How maintaining work-life balance has improved my productivity and creativity this year...</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500" data-bind="post.characterCount" data-mock="true">167 chars</span>
+                                    <div class="flex items-center space-x-1">
+                                        <button class="text-gray-400 hover:text-linkedin p-1 rounded transition" data-event="click:quickEdit">
+                                            <i class="fas fa-edit text-xs"></i>
+                                        </button>
+                                        <button class="text-gray-400 hover:text-error p-1 rounded transition" data-event="click:cancelSchedule">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: UpcomingSchedule -->
+            </div>
+            <!-- @END_COMPONENT: DashboardContent -->
+        </main>
+        <!-- @END_COMPONENT: MainContent -->
+    </div>
+    <!-- @END_COMPONENT: AppLayout -->
+
+    <!-- @COMPONENT: CreatePostModal (Hidden by default) -->
+    <div id="createPostModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50" data-implementation="Modal should be toggleable via JavaScript">
+        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Create New Post</h3>
+                <button class="text-gray-400 hover:text-gray-600 p-2" data-event="click:closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <!-- @COMPONENT: RichTextEditor -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Post Content</label>
+                    <div class="border border-gray-300 rounded-lg">
+                        <div class="border-b border-gray-200 p-3 flex items-center space-x-2 bg-gray-50">
+                            <button class="p-2 text-gray-600 hover:bg-gray-200 rounded transition" data-functionality="Rich text formatting buttons">
+                                <i class="fas fa-bold"></i>
+                            </button>
+                            <button class="p-2 text-gray-600 hover:bg-gray-200 rounded transition">
+                                <i class="fas fa-italic"></i>
+                            </button>
+                            <button class="p-2 text-gray-600 hover:bg-gray-200 rounded transition">
+                                <i class="fas fa-link"></i>
+                            </button>
+                            <button class="p-2 text-gray-600 hover:bg-gray-200 rounded transition">
+                                <i class="fas fa-list-ul"></i>
+                            </button>
+                            <button class="p-2 text-gray-600 hover:bg-gray-200 rounded transition">
+                                <i class="fas fa-hashtag"></i>
+                            </button>
+                        </div>
+                        <textarea class="w-full p-4 border-0 resize-none focus:ring-0 focus:outline-none" rows="6" placeholder="What's on your mind?" data-implementation="Should include character counter and hashtag suggestions"></textarea>
+                    </div>
+                    <div class="flex items-center justify-between mt-2 text-sm text-gray-500">
+                        <span>Character count: <span class="font-medium" data-bind="characterCount" data-mock="true">0</span>/3000</span>
+                        <span>Hashtags: <span class="font-medium" data-bind="hashtagCount" data-mock="true">0</span></span>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: RichTextEditor -->
+
+                <!-- @COMPONENT: ScheduleSettings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Schedule Date</label>
+                        <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-linkedin" data-implementation="Should validate against past dates">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Schedule Time</label>
+                        <input type="time" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin focus:border-linkedin" data-implementation="Should suggest optimal posting times">
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: ScheduleSettings -->
+
+                <!-- @COMPONENT: PostPreview -->
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">Preview</h4>
+                    <div class="bg-white rounded-lg p-4 border border-gray-200">
+                        <div class="flex items-start space-x-3">
+                            <!-- Professional headshot of a business person -->
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=48&h=48" alt="User avatar" class="w-12 h-12 rounded-full" data-mock="true">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <span class="font-medium text-gray-900" data-bind="user.name" data-mock="true">John Smith</span>
+                                    <span class="text-gray-500">•</span>
+                                    <span class="text-sm text-gray-500">Now</span>
+                                </div>
+                                <p class="text-gray-900" data-bind="postPreview" data-mock="true">Your post content will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: PostPreview -->
+            </div>
+
+            <div class="border-t border-gray-200 p-6 flex items-center justify-between">
+                <button class="text-gray-600 hover:text-gray-800 px-4 py-2 transition" data-event="click:saveDraft">
+                    Save as Draft
+                </button>
+                <div class="flex items-center space-x-3">
+                    <button class="px-4 py-2 text-gray-600 hover:text-gray-800 transition" data-event="click:cancel">
+                        Cancel
+                    </button>
+                    <button class="bg-linkedin hover:bg-linkedin-dark text-white px-6 py-2 rounded-lg transition" data-event="click:schedulePost">
+                        Schedule Post
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: CreatePostModal -->
+
+    <!-- @COMPONENT: ToastNotification (Hidden by default) -->
+    <div id="toast" class="fixed top-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 hidden transform transition-all duration-300" data-implementation="Should show success/error messages">
+        <div class="flex items-center space-x-3">
+            <div class="w-6 h-6 bg-success rounded-full flex items-center justify-center">
+                <i class="fas fa-check text-white text-xs"></i>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-900" data-bind="toast.title" data-mock="true">Success!</p>
+                <p class="text-xs text-gray-600" data-bind="toast.message" data-mock="true">Your post has been scheduled successfully.</p>
+            </div>
+            <button class="text-gray-400 hover:text-gray-600" data-event="click:closeToast">
+                <i class="fas fa-times text-xs"></i>
+            </button>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: ToastNotification -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        (function() {
+            // Basic UI interactions for demonstration
+            // In production, this would be replaced with React components and proper state management
+            
+            // Modal toggle functionality
+            const createPostBtn = document.querySelector('[data-event="click:openCreatePost"]');
+            const modal = document.getElementById('createPostModal');
+            const closeModalBtn = document.querySelector('[data-event="click:closeModal"]');
+            
+            if (createPostBtn && modal) {
+                createPostBtn.addEventListener('click', () => {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                });
+            }
+            
+            if (closeModalBtn && modal) {
+                closeModalBtn.addEventListener('click', () => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                });
+            }
+            
+            // Character counter for textarea
+            const textarea = document.querySelector('textarea');
+            const charCount = document.querySelector('[data-bind="characterCount"]');
+            
+            if (textarea && charCount) {
+                textarea.addEventListener('input', (e) => {
+                    charCount.textContent = e.target.value.length;
+                });
+            }
+            
+            // File upload visual feedback
+            const uploadArea = document.querySelector('[data-functionality*="Drag-and-drop"]');
+            if (uploadArea) {
+                uploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.add('border-linkedin', 'bg-linkedin', 'bg-opacity-5');
+                });
+                
+                uploadArea.addEventListener('dragleave', () => {
+                    uploadArea.classList.remove('border-linkedin', 'bg-linkedin', 'bg-opacity-5');
+                });
+                
+                uploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    uploadArea.classList.remove('border-linkedin', 'bg-linkedin', 'bg-opacity-5');
+                    // TODO: Handle file processing and validation
+                });
+            }
+            
+            // Toast notification demo
+            function showToast(title, message, type = 'success') {
+                const toast = document.getElementById('toast');
+                if (toast) {
+                    const titleEl = toast.querySelector('[data-bind="toast.title"]');
+                    const messageEl = toast.querySelector('[data-bind="toast.message"]');
+                    
+                    if (titleEl) titleEl.textContent = title;
+                    if (messageEl) messageEl.textContent = message;
+                    
+                    toast.classList.remove('hidden');
+                    
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 3000);
+                }
+            }
+            
+            // Demo toast on schedule post
+            const scheduleBtn = document.querySelector('[data-event="click:schedulePost"]');
+            if (scheduleBtn) {
+                scheduleBtn.addEventListener('click', () => {
+                    showToast('Post Scheduled!', 'Your LinkedIn post has been scheduled successfully.');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                        modal.classList.remove('flex');
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

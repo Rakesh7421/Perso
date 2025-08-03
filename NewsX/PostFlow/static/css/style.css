@@ -1,0 +1,339 @@
+:root {
+    --linkedin-blue: #0077b5;
+    --linkedin-light-blue: #00a0dc;
+    --linkedin-dark-blue: #004471;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-600: #6c757d;
+    --gray-800: #343a40;
+}
+
+/* LinkedIn-inspired color scheme */
+.bg-linkedin {
+    background-color: var(--linkedin-blue) !important;
+}
+
+.btn-linkedin {
+    background-color: var(--linkedin-blue);
+    border-color: var(--linkedin-blue);
+    color: white;
+}
+
+.btn-linkedin:hover {
+    background-color: var(--linkedin-dark-blue);
+    border-color: var(--linkedin-dark-blue);
+    color: white;
+}
+
+.btn-outline-linkedin {
+    border-color: var(--linkedin-blue);
+    color: var(--linkedin-blue);
+}
+
+.btn-outline-linkedin:hover {
+    background-color: var(--linkedin-blue);
+    border-color: var(--linkedin-blue);
+    color: white;
+}
+
+.text-linkedin {
+    color: var(--linkedin-blue) !important;
+}
+
+/* Hero section */
+.hero-section {
+    padding: 3rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+/* Feature cards */
+.feature-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--linkedin-blue);
+}
+
+/* Step cards */
+.step-card {
+    padding: 2rem 1rem;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: var(--linkedin-blue);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto 1rem;
+}
+
+/* Statistics cards */
+.stat-card {
+    border-radius: 10px;
+    color: white;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-card-body {
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    opacity: 0.8;
+    margin-right: 1rem;
+}
+
+.stat-content h3 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stat-content p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* File upload area */
+.file-upload-area {
+    border: 2px dashed var(--gray-300);
+    border-radius: 10px;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: var(--linkedin-blue);
+    background-color: rgba(0, 119, 181, 0.05);
+}
+
+.file-upload-area.drag-over {
+    border-color: var(--linkedin-blue);
+    background-color: rgba(0, 119, 181, 0.1);
+}
+
+.upload-placeholder h5 {
+    color: var(--gray-600);
+}
+
+.upload-file-info {
+    padding: 1rem;
+    background-color: var(--gray-100);
+    border-radius: 8px;
+}
+
+/* Format help cards */
+.format-help-card {
+    background: var(--gray-100);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--linkedin-blue);
+}
+
+.sample-data {
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 5px;
+    padding: 1rem;
+    font-size: 0.875rem;
+}
+
+.sample-data pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* Post preview */
+.post-preview-container {
+    background: var(--gray-100);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.linkedin-post-preview {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.post-header {
+    margin-bottom: 1rem;
+}
+
+.post-author {
+    display: flex;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 1.2rem;
+}
+
+.author-name {
+    font-weight: 600;
+    color: var(--gray-800);
+}
+
+.post-time {
+    font-size: 0.875rem;
+}
+
+.post-content {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+}
+
+.post-tags {
+    color: var(--linkedin-blue);
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.post-actions {
+    border-top: 1px solid var(--gray-200);
+    padding-top: 1rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Post content preview in table */
+.post-content-preview {
+    max-width: 300px;
+    line-height: 1.4;
+}
+
+/* Getting started section */
+.getting-started-section {
+    background: var(--gray-100);
+    padding: 3rem 2rem;
+    border-radius: 15px;
+    margin-top: 3rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 1rem;
+    }
+    
+    .feature-icon {
+        font-size: 2rem;
+    }
+    
+    .stat-card-body {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .stat-icon {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .file-upload-area {
+        padding: 2rem 1rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .action-buttons .btn {
+        width: 100%;
+    }
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-200);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--linkedin-blue);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--linkedin-dark-blue);
+}
+
+/* Focus styles for accessibility */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 119, 181, 0.25);
+    border-color: var(--linkedin-light-blue);
+}
+
+/* Loading animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading {
+    animation: spin 1s linear infinite;
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    .card-header,
+    footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: none !important;
+        box-shadow: none !important;
+    }
+}

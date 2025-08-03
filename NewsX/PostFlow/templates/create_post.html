@@ -1,0 +1,318 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if edit_mode %}Edit Post{% else %}Create Post{% endif %} - LinkedIn Post Scheduler
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    {% if edit_mode %}
+                        <i class="bi bi-pencil-square me-2"></i>Edit Post
+                    {% else %}
+                        <i class="bi bi-plus-circle me-2"></i>Create New Post
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="postForm">
+                    <!-- Post Content -->
+                    <div class="mb-4">
+                        <label for="content" class="form-label fw-semibold">
+                            <i class="bi bi-file-text me-1"></i>Post Content
+                        </label>
+                        <textarea class="form-control" id="content" name="content" rows="8" 
+                                  placeholder="Write your LinkedIn post here..." required
+                                  maxlength="3000">{% if edit_mode %}{{ post.content }}{% endif %}</textarea>
+                        <div class="form-text d-flex justify-content-between">
+                            <span>Write engaging content that resonates with your LinkedIn audience</span>
+                            <span>
+                                <span id="charCount">0</span>/3000 characters
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Scheduling -->
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="scheduled_date" class="form-label fw-semibold">
+                                <i class="bi bi-calendar me-1"></i>Scheduled Date
+                            </label>
+                            <input type="date" class="form-control" id="scheduled_date" name="scheduled_date" 
+                                   required value="{% if edit_mode %}{{ post.scheduled_time.strftime('%Y-%m-%d') }}{% else %}{{ default_date }}{% endif %}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="scheduled_time" class="form-label fw-semibold">
+                                <i class="bi bi-clock me-1"></i>Scheduled Time
+                            </label>
+                            <input type="time" class="form-control" id="scheduled_time" name="scheduled_time" 
+                                   required value="{% if edit_mode %}{{ post.scheduled_time.strftime('%H:%M') }}{% else %}{{ default_time }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <!-- Tags and Hashtags -->
+                    <div class="mb-4">
+                        <label for="post_tags" class="form-label fw-semibold">
+                            <i class="bi bi-tags me-1"></i>Hashtags & Mentions
+                        </label>
+                        <input type="text" class="form-control" id="post_tags" name="post_tags" 
+                               placeholder="#hashtag @mention" 
+                               value="{% if edit_mode %}{{ post.post_tags }}{% endif %}">
+                        <div class="form-text">
+                            Add relevant hashtags and mentions to increase post visibility
+                        </div>
+                    </div>
+
+                    <!-- Post Preview -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-eye me-1"></i>Live Preview
+                        </label>
+                        <div class="post-preview-container">
+                            <div class="linkedin-post-preview">
+                                <div class="post-header">
+                                    <div class="post-author">
+                                        <div class="author-avatar bg-linkedin text-white">
+                                            <i class="bi bi-person"></i>
+                                        </div>
+                                        <div class="author-info">
+                                            <div class="author-name">Your Profile</div>
+                                            <div class="post-time text-muted">Draft post</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="post-content" id="livePreviewContent">
+                                    Start typing to see your post preview...
+                                </div>
+                                <div class="post-tags" id="livePreviewTags" style="display: none;"></div>
+                                <div class="post-actions">
+                                    <div class="action-buttons">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-hand-thumbs-up me-1"></i>Like
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-chat me-1"></i>Comment
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-share me-1"></i>Share
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                        </a>
+                        <div>
+                            <button type="button" class="btn btn-outline-linkedin me-2" onclick="saveDraft()">
+                                <i class="bi bi-save me-1"></i>Save Draft
+                            </button>
+                            <button type="submit" class="btn btn-linkedin">
+                                {% if edit_mode %}
+                                    <i class="bi bi-check-circle me-1"></i>Update Post
+                                {% else %}
+                                    <i class="bi bi-calendar-plus me-1"></i>Schedule Post
+                                {% endif %}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tips Card -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-lightbulb me-2"></i>LinkedIn Post Tips
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-check-circle text-success me-1"></i>Best Practices</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="bi bi-arrow-right me-1"></i>Keep posts under 1,300 characters for maximum engagement</li>
+                            <li><i class="bi bi-arrow-right me-1"></i>Use 3-5 relevant hashtags</li>
+                            <li><i class="bi bi-arrow-right me-1"></i>Post between 8-10 AM and 12-2 PM for best reach</li>
+                            <li><i class="bi bi-arrow-right me-1"></i>Include a call-to-action</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-clock text-info me-1"></i>Optimal Timing</h6>
+                        <ul class="list-unstyled small">
+                            <li><i class="bi bi-arrow-right me-1"></i>Tuesday-Thursday: Highest engagement</li>
+                            <li><i class="bi bi-arrow-right me-1"></i>Morning posts: 8-10 AM</li>
+                            <li><i class="bi bi-arrow-right me-1"></i>Lunch break: 12-2 PM</li>
+                            <li><i class="bi bi-arrow-right me-1"></i>Avoid weekends and late evenings</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Character counter and live preview
+document.addEventListener('DOMContentLoaded', function() {
+    const contentTextarea = document.getElementById('content');
+    const charCount = document.getElementById('charCount');
+    const livePreviewContent = document.getElementById('livePreviewContent');
+    const livePreviewTags = document.getElementById('livePreviewTags');
+    const tagsInput = document.getElementById('post_tags');
+
+    function updateCharCount() {
+        const count = contentTextarea.value.length;
+        charCount.textContent = count;
+        
+        // Change color based on character count
+        if (count > 2700) {
+            charCount.className = 'text-danger fw-bold';
+        } else if (count > 2400) {
+            charCount.className = 'text-warning fw-bold';
+        } else {
+            charCount.className = 'text-muted';
+        }
+    }
+
+    function updateLivePreview() {
+        const content = contentTextarea.value;
+        const tags = tagsInput.value;
+
+        if (content.trim()) {
+            livePreviewContent.textContent = content;
+        } else {
+            livePreviewContent.textContent = 'Start typing to see your post preview...';
+        }
+
+        if (tags.trim()) {
+            livePreviewTags.innerHTML = '<i class="bi bi-tags me-1"></i>' + tags;
+            livePreviewTags.style.display = 'block';
+        } else {
+            livePreviewTags.style.display = 'none';
+        }
+    }
+
+    // Initial updates
+    updateCharCount();
+    updateLivePreview();
+
+    // Event listeners
+    contentTextarea.addEventListener('input', function() {
+        updateCharCount();
+        updateLivePreview();
+    });
+
+    tagsInput.addEventListener('input', updateLivePreview);
+
+    // Form validation
+    document.getElementById('postForm').addEventListener('submit', function(e) {
+        const content = contentTextarea.value.trim();
+        const scheduledDate = document.getElementById('scheduled_date').value;
+        const scheduledTime = document.getElementById('scheduled_time').value;
+
+        if (!content) {
+            e.preventDefault();
+            alert('Please enter post content.');
+            contentTextarea.focus();
+            return;
+        }
+
+        if (content.length > 3000) {
+            e.preventDefault();
+            alert('Post content exceeds the LinkedIn character limit of 3000 characters.');
+            contentTextarea.focus();
+            return;
+        }
+
+        if (!scheduledDate || !scheduledTime) {
+            e.preventDefault();
+            alert('Please select both date and time for scheduling.');
+            return;
+        }
+
+        // Check if scheduled time is in the future
+        const scheduledDateTime = new Date(scheduledDate + 'T' + scheduledTime);
+        const now = new Date();
+        
+        if (scheduledDateTime <= now) {
+            e.preventDefault();
+            alert('Scheduled time must be in the future.');
+            return;
+        }
+    });
+});
+
+function saveDraft() {
+    // This would typically save to localStorage or make an API call
+    const content = document.getElementById('content').value;
+    const tags = document.getElementById('post_tags').value;
+    
+    localStorage.setItem('linkedin_post_draft', JSON.stringify({
+        content: content,
+        tags: tags,
+        timestamp: new Date().toISOString()
+    }));
+    
+    // Show success message
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-success alert-dismissible fade show';
+    alertDiv.innerHTML = `
+        <i class="bi bi-check-circle me-2"></i>
+        Draft saved successfully!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.row'));
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        alertDiv.classList.remove('show');
+        setTimeout(() => alertDiv.remove(), 150);
+    }, 3000);
+}
+
+// Load draft on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const draft = localStorage.getItem('linkedin_post_draft');
+    if (draft && !{{ 'true' if edit_mode else 'false' }}) {
+        try {
+            const draftData = JSON.parse(draft);
+            const draftAge = Date.now() - new Date(draftData.timestamp).getTime();
+            
+            // Only load draft if it's less than 24 hours old
+            if (draftAge < 24 * 60 * 60 * 1000) {
+                document.getElementById('content').value = draftData.content;
+                document.getElementById('post_tags').value = draftData.tags;
+                
+                // Update counters and preview
+                document.getElementById('content').dispatchEvent(new Event('input'));
+                document.getElementById('post_tags').dispatchEvent(new Event('input'));
+                
+                // Show notification
+                const alertDiv = document.createElement('div');
+                alertDiv.className = 'alert alert-info alert-dismissible fade show';
+                alertDiv.innerHTML = `
+                    <i class="bi bi-info-circle me-2"></i>
+                    Draft loaded from previous session.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.row'));
+            }
+        } catch (e) {
+            console.error('Error loading draft:', e);
+        }
+    }
+});
+</script>
+{% endblock %}

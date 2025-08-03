@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Data - LinkedIn Post Scheduler{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">
+                    <i class="bi bi-upload me-2"></i>Upload Post Data
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                    <!-- File Upload Area -->
+                    <div class="mb-4">
+                        <label for="file" class="form-label fw-semibold">
+                            <i class="bi bi-file-arrow-up me-1"></i>Select File
+                        </label>
+                        <div class="file-upload-area" id="fileUploadArea">
+                            <input type="file" class="form-control" id="file" name="file" 
+                                   accept=".csv,.json" required style="display: none;">
+                            <div class="upload-placeholder">
+                                <i class="bi bi-cloud-upload display-4 text-muted mb-3"></i>
+                                <h5>Drag & drop your file here</h5>
+                                <p class="text-muted">or <a href="#" id="browseFile">browse files</a></p>
+                                <small class="text-muted">Supports CSV and JSON files (max 16MB)</small>
+                            </div>
+                            <div class="upload-file-info" style="display: none;">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-file-earmark-text text-primary me-2"></i>
+                                    <div class="flex-grow-1">
+                                        <div class="file-name fw-semibold"></div>
+                                        <small class="text-muted file-size"></small>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearFile()">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Format Help -->
+                    <div class="mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="format-help-card">
+                                    <h6><i class="bi bi-filetype-csv text-success me-1"></i>CSV Format</h6>
+                                    <p class="small mb-2">Required columns:</p>
+                                    <ul class="small mb-0">
+                                        <li><code>content</code> - Post text content</li>
+                                        <li><code>scheduled_time</code> - YYYY-MM-DD HH:MM:SS</li>
+                                        <li><code>post_tags</code> - Hashtags/mentions (optional)</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="format-help-card">
+                                    <h6><i class="bi bi-filetype-json text-info me-1"></i>JSON Format</h6>
+                                    <p class="small mb-2">Structure:</p>
+                                    <pre class="small mb-0"><code>{
+  "posts": [
+    {
+      "content": "Post text",
+      "scheduled_time": "2025-08-04T10:00:00",
+      "post_tags": "#hashtag"
+    }
+  ]
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Progress -->
+                    <div class="mb-4" id="uploadProgress" style="display: none;">
+                        <label class="form-label fw-semibold">Upload Progress</label>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="upload-status text-center mt-2">
+                            <span class="text-muted">Uploading...</span>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i>Back to Dashboard
+                        </a>
+                        <div>
+                            <button type="button" class="btn btn-outline-linkedin me-2" onclick="downloadSample()">
+                                <i class="bi bi-download me-1"></i>Download Sample
+                            </button>
+                            <button type="submit" class="btn btn-linkedin" id="uploadBtn">
+                                <i class="bi bi-upload me-1"></i>Upload & Import
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Sample Data Templates -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-file-earmark-text me-2"></i>Sample Data Templates
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>CSV Example</h6>
+                        <div class="sample-data">
+                            <pre><code>content,scheduled_time,post_tags
+"Excited to share our new product launch!",2025-08-04 10:00:00,"#product #launch #innovation"
+"Team collaboration tips for remote work",2025-08-04 14:30:00,"#remote #teamwork #productivity"</code></pre>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>JSON Example</h6>
+                        <div class="sample-data">
+                            <pre><code>{
+  "posts": [
+    {
+      "content": "Sharing insights from today's conference",
+      "scheduled_time": "2025-08-04T16:00:00",
+      "post_tags": "#conference #insights #learning"
+    }
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Guidelines -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Upload Guidelines
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-check-circle text-success me-1"></i>Requirements</h6>
+                        <ul class="small">
+                            <li>File size must be under 16MB</li>
+                            <li>CSV files must have headers</li>
+                            <li>Scheduled times must be in the future</li>
+                            <li>Post content must be under 3000 characters</li>
+                            <li>Use UTF-8 encoding for special characters</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="bi bi-lightbulb text-warning me-1"></i>Tips</h6>
+                        <ul class="small">
+                            <li>Test with a small file first</li>
+                            <li>Include timezone in your timestamps</li>
+                            <li>Use quotes around content with commas (CSV)</li>
+                            <li>Check for duplicate scheduled times</li>
+                            <li>Validate data before uploading</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('file');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const uploadPlaceholder = fileUploadArea.querySelector('.upload-placeholder');
+    const uploadFileInfo = fileUploadArea.querySelector('.upload-file-info');
+    const browseFileLink = document.getElementById('browseFile');
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadProgress = document.getElementById('uploadProgress');
+    const uploadBtn = document.getElementById('uploadBtn');
+
+    // File browse link click
+    browseFileLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        fileInput.click();
+    });
+
+    // File input change
+    fileInput.addEventListener('change', function() {
+        if (this.files && this.files.length > 0) {
+            showFileInfo(this.files[0]);
+        }
+    });
+
+    // Drag and drop functionality
+    fileUploadArea.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.classList.add('drag-over');
+    });
+
+    fileUploadArea.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+    });
+
+    fileUploadArea.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            const file = files[0];
+            
+            // Validate file type
+            if (file.name.toLowerCase().endsWith('.csv') || file.name.toLowerCase().endsWith('.json')) {
+                fileInput.files = files;
+                showFileInfo(file);
+            } else {
+                alert('Please upload only CSV or JSON files.');
+            }
+        }
+    });
+
+    function showFileInfo(file) {
+        const fileName = uploadFileInfo.querySelector('.file-name');
+        const fileSize = uploadFileInfo.querySelector('.file-size');
+        
+        fileName.textContent = file.name;
+        fileSize.textContent = formatFileSize(file.size);
+        
+        uploadPlaceholder.style.display = 'none';
+        uploadFileInfo.style.display = 'block';
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Form submission with progress
+    uploadForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert('Please select a file to upload.');
+            return;
+        }
+
+        const file = fileInput.files[0];
+        
+        // Validate file size (16MB limit)
+        if (file.size > 16 * 1024 * 1024) {
+            alert('File size exceeds 16MB limit.');
+            return;
+        }
+
+        // Show progress
+        uploadProgress.style.display = 'block';
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Processing...';
+
+        // Simulate progress (since we're using regular form submission)
+        let progress = 0;
+        const progressBar = uploadProgress.querySelector('.progress-bar');
+        const progressStatus = uploadProgress.querySelector('.upload-status span');
+        
+        const progressInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 90) progress = 90;
+            
+            progressBar.style.width = progress + '%';
+            progressStatus.textContent = `Processing... ${Math.round(progress)}%`;
+        }, 200);
+
+        // Submit the form
+        setTimeout(() => {
+            clearInterval(progressInterval);
+            progressBar.style.width = '100%';
+            progressStatus.textContent = 'Upload complete!';
+            
+            // Create a new form and submit it
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = response.url;
+                } else {
+                    throw new Error('Upload failed');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<i class="bi bi-upload me-1"></i>Upload & Import';
+                uploadProgress.style.display = 'none';
+                alert('Upload failed. Please try again.');
+            });
+        }, 1000);
+    });
+});
+
+function clearFile() {
+    const fileInput = document.getElementById('file');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const uploadPlaceholder = fileUploadArea.querySelector('.upload-placeholder');
+    const uploadFileInfo = fileUploadArea.querySelector('.upload-file-info');
+    
+    fileInput.value = '';
+    uploadPlaceholder.style.display = 'block';
+    uploadFileInfo.style.display = 'none';
+}
+
+function downloadSample() {
+    const csvContent = `content,scheduled_time,post_tags
+"Excited to announce our new product launch! 🚀",2025-08-04 10:00:00,"#product #launch #innovation"
+"5 tips for effective team collaboration in remote work",2025-08-04 14:30:00,"#remote #teamwork #productivity"
+"Reflecting on key insights from today's industry conference",2025-08-04 16:00:00,"#conference #insights #learning"
+"Weekend motivation: Success is not final, failure is not fatal",2025-08-05 09:00:00,"#motivation #success #mindset"`;
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'linkedin_posts_sample.csv');
+    link.style.visibility = 'hidden';
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
+{% endblock %}
