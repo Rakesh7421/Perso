@@ -1,0 +1,4 @@
+# Core dependencies for all projects
+requests>=2.32.4
+
+# Add other shared dependencies here as projects grow

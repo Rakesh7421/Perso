@@ -1,0 +1,21 @@
+# Testing-specific dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+pytest-xdist>=3.0.0
+pytest-html>=3.1.0
+pytest-asyncio>=0.21.0
+
+# Test data and fixtures
+factory-boy>=3.2.0
+faker>=18.0.0
+
+# Performance testing
+pytest-benchmark>=4.0.0
+
+# API testing (for NewsX project)
+responses>=0.23.0
+httpx>=0.24.0
+
+# Include base requirements for testing
+-r requirements.txt

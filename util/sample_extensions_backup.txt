@@ -1,0 +1,16 @@
+fermelone.simple-browser-multi
+keploy.keployio
+kilocode.kilo-code
+leosj29.bash-sh-runner
+mechatroner.rainbow-csv
+ms-python.debugpy
+ms-python.python
+ms-python.vscode-pylance
+ms-python.vscode-python-envs
+ms-vscode-remote.remote-ssh
+pamaron.pytest-runner
+rebornix.project-snippets
+smallcloud.codify
+vxplain.vxplain
+wolfieshorizon.python-auto-venv
+zencoderai.zencoder
